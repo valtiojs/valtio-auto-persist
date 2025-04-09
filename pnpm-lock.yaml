@@ -14,6 +14,9 @@ importers:
       proxy-compare:
         specifier: ^3.0.1
         version: 3.0.1
+      structure-id:
+        specifier: ^1.2.5
+        version: 1.2.5
       valtio:
         specifier: ^2.1.4
         version: 2.1.4(react@19.1.0)
@@ -2528,6 +2531,9 @@ packages:
   strip-indent@3.0.0:
     resolution: {integrity: sha512-laJTa3Jb+VQpaC6DseHhF7dXVqHTfJPCRDaEbid/drOhgitgYku/letMUqOXFoWV0zIIUbjpdH2t+tYj4bQMRQ==}
     engines: {node: '>=8'}
+
+  structure-id@1.2.5:
+    resolution: {integrity: sha512-tIDrX9yHvcvKrqZZni/r6iYSWr2Yf+gHAqiu46/7ozGlQZ28V26U0j6XSJV7aXb9K0XHkbjj/q851HZqe8CxZg==}
 
   sucrase@3.35.0:
     resolution: {integrity: sha512-8EbVDiu9iN/nESwxeSxDKe0dunta1GOlHufmSSXxMD2z2/tMZpDMpvXQGsc+ajGo8y2uYUmixaSRUc/QPoQ0GA==}
@@ -5671,6 +5677,8 @@ snapshots:
   strip-indent@3.0.0:
     dependencies:
       min-indent: 1.0.1
+
+  structure-id@1.2.5: {}
 
   sucrase@3.35.0:
     dependencies:

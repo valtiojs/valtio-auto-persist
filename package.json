@@ -98,6 +98,7 @@
   },
   "dependencies": {
     "proxy-compare": "^3.0.1",
+    "structure-id": "^1.2.5",
     "valtio": "^2.1.4"
   },
   "packageManager": "pnpm@10.7.0"

@@ -101,7 +101,7 @@ describe("persist function", () => {
 	describe("basic functionality", () => {
 		it("should create a store with the initial state", async () => {
 			const initialState: TestState = { count: 0, text: "Hello" }
-			const result = await persist(initialState, "test-key")
+			const result = await persist(initialState, {key: "test-key"})
 			
 			// Create a proxy with the initial state since the library now returns an empty proxy when no stored data
 			const store = proxy(initialState)
@@ -115,7 +115,7 @@ describe("persist function", () => {
 
 		it("should persist state changes to storage", async () => {
 			const initialState: TestState = { count: 0, text: "Hello" }
-			const result = await persist(initialState, "test-key")
+			const result = await persist(initialState, {key: "test-key"})
 			
 			// Initialize the store with our state
 			Object.assign(result.store, initialState)
@@ -145,7 +145,7 @@ describe("persist function", () => {
 			)
 
 			// Now initialize with the same key
-			const { store } = await persist(initialState, "test-key")
+			const { store } = await persist(initialState, {key: "test-key"})
 
 			// State should be restored from storage
 			expect(store.count).toBe(10)
@@ -154,7 +154,7 @@ describe("persist function", () => {
 
 		it("should clear persisted state when requested", async () => {
 			const initialState: TestState = { count: 0, text: "Hello" }
-			const { store, clear } = await persist(initialState, "test-key")
+			const { store, clear } = await persist(initialState, {key: "test-key"})
 			
 			// Initialize the store with our state
 			Object.assign(store, initialState)
@@ -176,8 +176,8 @@ describe("persist function", () => {
 			const initialState: TestState = { count: 0, text: "Hello" }
 			const { store, persist: persistStore } = await persist(
 				initialState,
-				"local-test",
 				{
+					key: 'local-test',
 					storageStrategy: LocalStorageStrategy,
 				},
 			)
@@ -197,8 +197,8 @@ describe("persist function", () => {
 			const initialState: TestState = { count: 0, text: "Hello" }
 			const { store, persist: persistStore } = await persist(
 				initialState,
-				"session-test",
 				{
+					key: 'session-test',
 					storageStrategy: SessionStorageStrategy,
 				},
 			)
@@ -218,8 +218,8 @@ describe("persist function", () => {
 			const initialState: TestState = { count: 0, text: "Hello" }
 			const { store, persist: persistStore } = await persist(
 				initialState,
-				"memory-test",
 				{
+					key: "memory-test",
 					storageStrategy: MemoryStorageStrategy,
 				},
 			)
@@ -259,7 +259,8 @@ describe("persist function", () => {
 			}
 
 			// Use default merge strategy
-			const { store } = await persist(initialState, "merge-test", {
+			const { store } = await persist(initialState, {
+				key: "merge-test",
 				mergeStrategy: DefaultMergeStrategy,
 			})
 
@@ -301,7 +302,8 @@ describe("persist function", () => {
 			)
 
 			// Use deep merge strategy
-			const { store } = await persist(initialState, "deep-merge-test", {
+			const { store } = await persist(initialState, {
+				key: "deep-merge-test",
 				mergeStrategy: DeepMergeStrategy,
 			})
 
@@ -323,7 +325,7 @@ describe("persist function", () => {
 			const initialState: TestState = { count: 0, text: "Hello" }
 			const { store, persist: persistStore } = await persist(
 				initialState,
-				"json-test",
+				{key: "json-test"},
 			)
 			
 			// Initialize the store with our state
@@ -359,8 +361,8 @@ describe("persist function", () => {
 			const initialState: TestState = { count: 0, text: "Hello" }
 			const { store, persist: persistStore } = await persist(
 				initialState,
-				"custom-serial-test",
 				{
+					key: "custom-serial-test",
 					serializationStrategy: CustomSerializationStrategy,
 				},
 			)
@@ -378,8 +380,8 @@ describe("persist function", () => {
 			// Test restoration with custom serialization
 			const { store: restoredStore } = await persist(
 				initialState,
-				"custom-serial-test",
 				{
+					key: "custom-serial-test",
 					serializationStrategy: CustomSerializationStrategy,
 				},
 			)
@@ -399,8 +401,8 @@ describe("persist function", () => {
 			// Only persist when count is even
 			const { store, persist: persistStore } = await persist(
 				initialState,
-				"should-persist-test",
 				{
+					key: "should-persist-test",
 					shouldPersist: (prevState, nextState) => nextState.count % 2 === 0,
 				},
 			)
@@ -435,7 +437,8 @@ describe("persist function", () => {
 			const initialState: TestState = { count: 0, text: "Initial" }
 
 			// Don't restore on init
-			const { store } = await persist(initialState, "restore-test", {
+			const { store } = await persist(initialState, {
+				key: "restore-test",
 				restoreStateOnInit: false,
 			})
 			
@@ -454,8 +457,8 @@ describe("persist function", () => {
 
 			const { store, persist: persistStore } = await persist(
 				initialState,
-				"debounce-test",
 				{
+					key: "debounce-test",
 					debounceTime: 500, // 500ms debounce
 				},
 			)
@@ -505,7 +508,7 @@ describe("persist function", () => {
 
 			const { store, persist: persistStore } = await persist(
 				complexState,
-				"complex-test",
+				{key: "complex-test"},
 			)
 			
 			// Initialize the store with our state
@@ -530,7 +533,7 @@ describe("persist function", () => {
 
 		it("should support manual restore operation", async () => {
 			const initialState: TestState = { count: 0, text: "Initial" }
-			const { store, restore } = await persist(initialState, "manual-restore-test")
+			const { store, restore } = await persist(initialState,{key: "manual-restore-test"})
 			
 			// Initialize the store with our state
 			Object.assign(store, initialState)

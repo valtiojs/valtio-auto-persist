@@ -10,6 +10,7 @@ import { DefaultMergeStrategy } from "./merge/default"
 import { JSONSerializationStrategy } from "./serialization/json"
 import { debounce, updateStore } from "./utils"
 import type { HistoryOptions } from "./history"
+import { generateStructureId } from 'structure-id'
 
 export type * from "./types"
 
@@ -18,6 +19,7 @@ export * from "./storage"
 
 // Define your options type (without the key)
 interface PersistOptions<T extends object> {
+	key?: string
 	// How to store state - accepting a constructor
 	storageStrategy?: {
 		new (): StorageStrategy
@@ -36,6 +38,8 @@ interface PersistOptions<T extends object> {
 	debounceTime?: number
 	// history enabled
 	history?: HistoryOptions<T>
+	// update id on structure change
+	updateStorageKeyOnStructureChange?: boolean
 }
 
 const isSyncStorage = (
@@ -56,20 +60,27 @@ const isSyncMerger = <T>(
 	return !merger.isAsync
 }
 
+let userProvidedKey = true
+
 export async function persist<T extends object>(
 	initialState: T,
-	key: string,
 	options?: PersistOptions<T>,
 ): Promise<PersistResult<T>> {
 	const defaultOptions = {
+		key: '',
 		storageStrategy: LocalStorageStrategy,
 		serializationStrategy: JSONSerializationStrategy,
 		mergeStrategy: DefaultMergeStrategy,
 		shouldPersist: () => true,
 		debounceTime: 100,
+		updateStorageKeyOnStructureChange: true
 	}
 
 	const o = { ...defaultOptions, ...options }
+
+	const key = o.key === '' ? generateStructureId(initialState) : o.key
+
+	if (o.key === '') userProvidedKey = false
 
 	// Create instances from constructors
 	const storageInstance = new o.storageStrategy()
@@ -146,8 +157,25 @@ export async function persist<T extends object>(
 	const debouncedPersist = debounce(persistData, debounceTime)
 
 	// Subscribe to changes
-	subscribe(store, () => {
+	subscribe(store, async () => {
 		const currentState = snapshot(store)
+
+		const generatedId = generateStructureId(currentState)
+
+		// if the structure of the data has changed, change the key
+		if (key !== generatedId && !userProvidedKey && o.updateStorageKeyOnStructureChange) {
+			const data = isSyncSerializer(serializer)
+				? serializer.serialize(currentState)
+				: await serializer.serialize(currentState)
+
+			if (isSyncStorage(storage)) {
+				storage.remove(key)
+				storage.set(generatedId, data)
+			} else {
+				await storage.remove(key)
+				await storage.set(generatedId, data)
+			}
+		}
 
 		if (shouldPersist(previousState, currentState)) {
 			debouncedPersist()
