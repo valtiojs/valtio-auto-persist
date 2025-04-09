@@ -3,7 +3,7 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/valtio-auto-persist?style=flat-square)
 ![NPM License](https://img.shields.io/npm/l/valtio-auto-persist?style=flat-square)
 
-# valtio-persist
+# valtio-auto-persist
 
 A persistence layer for [valtio](https://github.com/pmndrs/valtio) that allows you to save and restore state to various storage backends - without the need for keys!
 

@@ -1,12 +1,12 @@
 {
-  "name": "valtio-persist",
+  "name": "valtio-auto-persist",
   "description": "Persist valtio state",
   "version": "2.0.3",
   "type": "module",
   "author": "Michael Sweeney <overthemike@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/valtiojs/valtio-persist.git"
+    "url": "git+https://github.com/valtiojs/valtio-auto-persist.git"
   },
   "source": "/src/index.ts",
   "main": "./dist/index.js",
@@ -65,9 +65,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/valtiojs/valtio-persist/issues"
+    "url": "https://github.com/valtiojs/valtio-auto-persist/issues"
   },
-  "homepage": "https://github.com/valtiojs/valtio-persist#readme",
+  "homepage": "https://github.com/valtiojs/valtio-auto-persist#readme",
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@types/node": "^22.13.14",
