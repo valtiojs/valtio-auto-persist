@@ -143,57 +143,57 @@ describe("AsyncStorageStrategy", () => {
 
   it("should work with persist function", async () => {
     const initialState: TestState = { count: 0, text: "Hello" }
-    
+
     const { store, persist: persistStore } = await persist(
       initialState,
-      "async-test",
       {
+        key: "async-test",
         storageStrategy: AsyncStorageStrategy
       },
     )
-    
+
     // Initialize store with initial state
     Object.assign(store, initialState)
-    
+
     // Update the store
     store.count = 42
     store.text = "Updated"
-    
+
     // Manually persist
     await persistStore()
-    
+
     // Check if AsyncStorage was called with correct args
     expect(asyncStorageMock.setItem).toHaveBeenCalledWith(
-      "async-test", 
+      "async-test",
       expect.any(String)
     )
-    
+
     // Verify the persisted value
     const storedJson = await asyncStorageMock.getItem("async-test")
     const storedData = JSON.parse(storedJson)
-    
+
     expect(storedData.count).toBe(42)
     expect(storedData.text).toBe("Updated")
   })
 
   it("should restore state from AsyncStorage", async () => {
     const initialState: TestState = { count: 0, text: "Initial" }
-    
+
     // First store something in AsyncStorage
     await asyncStorageMock.setItem(
       "restore-test",
       JSON.stringify({ count: 99, text: "Restored" })
     )
-    
+
     // Create store with same key
     const { store } = await persist(
       initialState,
-      "restore-test",
       {
+        key: "restore-test",
         storageStrategy: AsyncStorageStrategy
       }
     )
-    
+
     // State should be restored from storage
     expect(store.count).toBe(99)
     expect(store.text).toBe("Restored")
